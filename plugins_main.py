@@ -5,7 +5,7 @@ from plugin_manager import PluginManager
 
 _log = get_log()
 bot = BotClient()
-plugin_manager = PluginManager(plugin_dir="plugins")
+plugin_manager = PluginManager(plugin_dir="plugins", bot=bot)
 
 # 加载所有插件
 plugin_manager.load_plugins()

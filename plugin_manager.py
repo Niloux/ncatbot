@@ -1,6 +1,7 @@
 import importlib
 import os
 
+from ncatbot.client import BotClient
 from ncatbot.logger import get_log
 from ncatbot.message import GroupMessage, PrivateMessage
 from ncatbot.plugins_base import PluginBase
@@ -9,9 +10,10 @@ _log = get_log()
 
 
 class PluginManager:
-    def __init__(self, plugin_dir: str):
+    def __init__(self, plugin_dir: str, bot: BotClient):
         self.plugin_dir = plugin_dir
         self.plugins = []
+        self.bot = bot
 
     def load_plugins(self):
         """加载插件目录中的插件"""
@@ -22,7 +24,7 @@ class PluginManager:
                     continue
                 module = importlib.import_module(f"plugins.{module_name}")
                 plugin_class = getattr(module, module_name)
-                plugin_instance = plugin_class()  # 实例化插件类
+                plugin_instance = plugin_class(self.bot)  # 实例化插件类
                 self.plugins.append(plugin_instance)
 
         _log.info(f"Loaded {len(self.plugins)} plugins")
